@@ -28,6 +28,16 @@ async function run() {
     // await client.connect();
     // Send a ping to confirm a successful connection
 
+    const userCollection = client.db('urbanOasis').collection('users');
+
+    app.post('/jwt', async (req, res) => {
+      const user = req.body;
+      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: '364d',
+      });
+      res.send({ token });
+    });
+
     await client.db('admin').command({ ping: 1 });
     console.log(
       'Pinged your deployment. You successfully connected to MongoDB!'
