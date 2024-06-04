@@ -8,7 +8,18 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const port = process.env.PORT || 5000;
 
 //middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'https://urban-oasis-indev.firebaseapp.com',
+      'https://urban-oasis-indev.web.app',
+      'https://api.imgbb.com/1/upload?key=81875fbd7ee7b4b86d929608d06339de',
+    ],
+    optionsSuccessStatus: 200,
+  })
+);
 app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.rocppxe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
@@ -50,6 +61,7 @@ async function run() {
     // JWT
     app.post('/jwt', async (req, res) => {
       const user = req.body;
+      console.log(user);
       const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: '364d',
       });
@@ -80,3 +92,11 @@ async function run() {
   }
 }
 run().catch(console.dir);
+
+app.get('/', (req, res) => {
+  res.send('Urban Oasis Server is Running');
+});
+
+app.listen(port, () => {
+  console.log(`Urban Oasis Server is running at ${port}`);
+});
