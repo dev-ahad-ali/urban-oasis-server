@@ -81,6 +81,8 @@ async function run() {
     });
 
     // User Related Api
+
+    // add user data on the database
     app.post('/users', async (req, res) => {
       const user = req.body;
       const query = { email: user.email };
@@ -92,6 +94,22 @@ async function run() {
 
       const result = await userCollection.insertOne(user);
       res.send(result);
+    });
+
+    // check user role
+    app.get('/user/:email', verifyToken, async (req, res) => {
+      const email = req.params.email;
+      if (email !== req.decoded.email) {
+        return res.status(403).send({ message: 'Forbidden access' });
+      }
+      const query = { email: email };
+      const user = await userCollection.findOne(query);
+      let role = '';
+      if (user) {
+        role = user?.role;
+      }
+
+      res.send(role);
     });
 
     await client.db('admin').command({ ping: 1 });
