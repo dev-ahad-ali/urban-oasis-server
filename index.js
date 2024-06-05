@@ -15,7 +15,7 @@ app.use(
       'http://localhost:5174',
       'https://urban-oasis-indev.firebaseapp.com',
       'https://urban-oasis-indev.web.app',
-      'https://api.imgbb.com/1/upload?key=81875fbd7ee7b4b86d929608d06339de',
+      //   'https://api.imgbb.com/1/upload?key=c572304118635f890be893cfe3c041',
     ],
     optionsSuccessStatus: 200,
   })
@@ -56,6 +56,18 @@ async function run() {
         req.decoded = decoded;
         next();
       });
+    };
+
+    // verify admin middleware
+    const verifyAdmin = async (req, res, next) => {
+      const email = req.decoded.email;
+      const query = { email: email };
+      const user = await userCollection.findOne(query);
+      const isAdmin = user?.role === 'admin';
+      if (!isAdmin) {
+        return res.status(403).send({ message: 'forbidden access' });
+      }
+      next();
     };
 
     // JWT
