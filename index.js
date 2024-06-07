@@ -3,7 +3,7 @@ const app = express();
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const port = process.env.PORT || 5000;
 
@@ -118,14 +118,22 @@ async function run() {
     });
 
     // update user role
-    app.patch('/user/:email', verifyToken, verifyAdmin, async (req, res) => {
+    app.patch('/users/:email', verifyToken, verifyAdmin, async (req, res) => {
       const query = { email: req.params.email };
       const updatedDoc = {
         $set: {
-          role: req.body,
+          role: req.body.role,
         },
       };
       const result = await userCollection.updateOne(query, updatedDoc);
+
+      res.send(result);
+    });
+
+    // delete user
+    app.delete('/user/:id', async (req, res) => {
+      const query = { _id: new ObjectId(req.params.id) };
+      const result = await userCollection.deleteOne(query);
 
       res.send(result);
     });
