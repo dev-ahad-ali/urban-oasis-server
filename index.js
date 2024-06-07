@@ -73,7 +73,6 @@ async function run() {
     // JWT
     app.post('/jwt', async (req, res) => {
       const user = req.body;
-      console.log(user);
       const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: '364d',
       });
@@ -96,6 +95,12 @@ async function run() {
       res.send(result);
     });
 
+    // get all users from database
+    app.get('/users', verifyToken, verifyAdmin, async (req, res) => {
+      const users = await userCollection.find().toArray();
+      res.send(users);
+    });
+
     // check user role
     app.get('/user/:email', verifyToken, async (req, res) => {
       const email = req.params.email;
@@ -110,6 +115,19 @@ async function run() {
       }
 
       res.send(role);
+    });
+
+    // update user role
+    app.patch('/user/:email', verifyToken, verifyAdmin, async (req, res) => {
+      const query = { email: req.params.email };
+      const updatedDoc = {
+        $set: {
+          role: req.body,
+        },
+      };
+      const result = await userCollection.updateOne(query, updatedDoc);
+
+      res.send(result);
     });
 
     await client.db('admin').command({ ping: 1 });
