@@ -40,6 +40,7 @@ async function run() {
     // Send a ping to confirm a successful connection
 
     const userCollection = client.db('urbanOasis').collection('users');
+    const propertyCollection = client.db('urbanOasis').collection('properties');
 
     // verify token middleware
     const verifyToken = (req, res, next) => {
@@ -79,7 +80,7 @@ async function run() {
       res.send({ token });
     });
 
-    // User Related Api
+    // User Management Related Api
 
     // add user data on the database
     app.post('/users', async (req, res) => {
@@ -131,10 +132,19 @@ async function run() {
     });
 
     // delete user
-    app.delete('/user/:id', async (req, res) => {
+    app.delete('/users/:id', async (req, res) => {
       const query = { _id: new ObjectId(req.params.id) };
       const result = await userCollection.deleteOne(query);
 
+      res.send(result);
+    });
+
+    // Agent Api
+
+    // add property
+    app.post('/property', verifyToken, async (req, res) => {
+      const property = req.body;
+      const result = await propertyCollection.insertOne(property);
       res.send(result);
     });
 
