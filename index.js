@@ -142,9 +142,16 @@ async function run() {
     // Agent Api
 
     // add property
-    app.post('/property', verifyToken, async (req, res) => {
+    app.post('/properties', verifyToken, async (req, res) => {
       const property = req.body;
       const result = await propertyCollection.insertOne(property);
+      res.send(result);
+    });
+
+    // get added properties for each agent
+    app.get('/properties/:email', async (req, res) => {
+      const query = { agentEmail: req.params.email };
+      const result = await propertyCollection.find(query).toArray();
       res.send(result);
     });
 
