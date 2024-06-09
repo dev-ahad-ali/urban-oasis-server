@@ -155,6 +155,13 @@ async function run() {
       res.send(result);
     });
 
+    // get one property data
+    app.get('/properties', async (req, res) => {
+      const query = { _id: new ObjectId(req.query.id) };
+      const result = await propertyCollection.findOne(query);
+      res.send(result);
+    });
+
     // delete Property
     app.delete('/properties/:id', async (req, res) => {
       const query = { _id: new ObjectId(req.params.id) };
