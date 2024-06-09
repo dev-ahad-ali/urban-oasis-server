@@ -148,6 +148,12 @@ async function run() {
       res.send(result);
     });
 
+    // get all properties
+    app.get('/properties', verifyToken, async (req, res) => {
+      const result = await propertyCollection.find().toArray();
+      res.send(result);
+    });
+
     // get added properties for each agent
     app.get('/properties/:email', async (req, res) => {
       const query = { agentEmail: req.params.email };
