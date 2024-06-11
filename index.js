@@ -41,6 +41,7 @@ async function run() {
 
     const userCollection = client.db('urbanOasis').collection('users');
     const propertyCollection = client.db('urbanOasis').collection('properties');
+    const wishCollection = client.db('urbanOasis').collection('wishes');
 
     // verify token middleware
     const verifyToken = (req, res, next) => {
@@ -193,6 +194,20 @@ async function run() {
     app.get('/allProperties', verifyToken, async (req, res) => {
       const query = { status: 'verified' };
       const result = await propertyCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    // add to wish list api
+    app.post('/wishList', async (req, res) => {
+      const item = req.body;
+      const result = await wishCollection.insertOne(item);
+      res.send(result);
+    });
+
+    // get user specific wish list data
+    app.get('/wishList/:email', async (req, res) => {
+      const query = { userEmail: req.params.email };
+      const result = await wishCollection.find(query).toArray();
       res.send(result);
     });
 
