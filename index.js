@@ -42,6 +42,7 @@ async function run() {
     const userCollection = client.db('urbanOasis').collection('users');
     const propertyCollection = client.db('urbanOasis').collection('properties');
     const wishCollection = client.db('urbanOasis').collection('wishes');
+    const offerCollection = client.db('urbanOasis').collection('offers');
 
     // verify token middleware
     const verifyToken = (req, res, next) => {
@@ -215,6 +216,13 @@ async function run() {
     app.delete('/wishList/:id', async (req, res) => {
       const query = { _id: new ObjectId(req.params.id) };
       const result = await wishCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // send offer api
+    app.post('/offers', async (req, res) => {
+      const offer = req.body;
+      const result = await offerCollection.insertOne(offer);
       res.send(result);
     });
 
