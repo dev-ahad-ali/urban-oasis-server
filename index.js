@@ -254,6 +254,17 @@ async function run() {
         const result = await offerCollection.updateOne(query, updatedDoc);
         res.send(result);
       }
+
+      if (status === 'accepted') {
+        const query = { _id: new ObjectId(req.params.id) };
+        const updatedDoc = {
+          $set: {
+            status: status,
+          },
+        };
+        const result = await offerCollection.updateOne(query, updatedDoc);
+        res.send(result);
+      }
     });
 
     await client.db('admin').command({ ping: 1 });
