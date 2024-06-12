@@ -267,6 +267,19 @@ async function run() {
       }
     });
 
+    // auto reject similar offer
+    app.patch('/offersAutoReject', async (req, res) => {
+      const propertyId = req.body.propertyId;
+      const query = { propertyId: propertyId, status: 'pending' };
+      const updatedDoc = {
+        $set: {
+          status: 'rejected',
+        },
+      };
+      const result = await offerCollection.updateMany(query, updatedDoc);
+      res.send(result);
+    });
+
     await client.db('admin').command({ ping: 1 });
     console.log('Pinged your deployment. You successfully connected to MongoDB!');
   } finally {
