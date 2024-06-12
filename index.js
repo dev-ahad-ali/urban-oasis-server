@@ -240,6 +240,22 @@ async function run() {
       res.send(result);
     });
 
+    // accept or reject offer
+    app.patch('/offers/:id', async (req, res) => {
+      const status = req.body.status;
+
+      if (status === 'rejected') {
+        const query = { _id: new ObjectId(req.params.id) };
+        const updatedDoc = {
+          $set: {
+            status: status,
+          },
+        };
+        const result = await offerCollection.updateOne(query, updatedDoc);
+        res.send(result);
+      }
+    });
+
     await client.db('admin').command({ ping: 1 });
     console.log('Pinged your deployment. You successfully connected to MongoDB!');
   } finally {
