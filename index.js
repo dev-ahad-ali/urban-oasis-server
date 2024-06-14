@@ -150,6 +150,23 @@ async function run() {
       res.send(result);
     });
 
+    // update property
+    app.patch('/property/:id', async (req, res) => {
+      const query = { _id: new ObjectId(req.params.id) };
+      const update = req.body;
+      const updatedDoc = {
+        $set: {
+          title: update.title,
+          location: update.location,
+          image: update.image,
+          minPrice: update.minPrice,
+          maxPrice: update.maxPrice,
+        },
+      };
+      const result = await propertyCollection.updateOne(query, updatedDoc);
+      res.send(result);
+    });
+
     // get all properties
     app.get('/properties', verifyToken, async (req, res) => {
       const result = await propertyCollection.find().toArray();
