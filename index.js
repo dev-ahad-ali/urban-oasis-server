@@ -312,6 +312,20 @@ async function run() {
         clientSecret: paymentIntent.client_secret,
       });
     });
+
+    app.patch('/propertyBought/:id', async (req, res) => {
+      const paymentInfo = req.body;
+      const query = { _id: new ObjectId(req.params.id) };
+      const updatedDoc = {
+        $set: {
+          paymentInfo: paymentInfo,
+        },
+      };
+
+      const result = await propertyCollection.updateOne(query, updatedDoc);
+      res.send(result);
+    });
+
     await client.db('admin').command({ ping: 1 });
     console.log('Pinged your deployment. You successfully connected to MongoDB!');
   } finally {
