@@ -297,6 +297,13 @@ async function run() {
       res.send(result);
     });
 
+    // get sold properties
+    app.get('/soldProperties/:email', async (req, res) => {
+      const query = { agentEmail: req.params.email, propertyBought: 'bought' };
+      const result = await propertyCollection.find(query).toArray();
+      res.send(result);
+    });
+
     // payment intent
     app.post('/create-payment-intent', async (req, res) => {
       const { price } = req.body;
@@ -313,11 +320,13 @@ async function run() {
       });
     });
 
+    // save payment details
     app.patch('/propertyBought/:id', async (req, res) => {
       const paymentInfo = req.body;
       const query = { _id: new ObjectId(req.params.id) };
       const updatedDoc = {
         $set: {
+          propertyBought: 'bought',
           paymentInfo: paymentInfo,
         },
       };
