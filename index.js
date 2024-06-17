@@ -112,12 +112,7 @@ async function run() {
       }
       const query = { email: email };
       const user = await userCollection.findOne(query);
-      let role = '';
-      if (user) {
-        role = user?.role;
-      }
-
-      res.send(role);
+      res.send(user?.role);
     });
 
     // update user role
@@ -301,7 +296,8 @@ async function run() {
     app.get('/soldProperties/:email', async (req, res) => {
       const query = { agentEmail: req.params.email, propertyBought: 'bought' };
       const result = await propertyCollection.find(query).toArray();
-      res.send(result);
+      const count = await propertyCollection.countDocuments(query);
+      res.send({ result, count });
     });
 
     // payment intent
