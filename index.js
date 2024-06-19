@@ -43,6 +43,7 @@ async function run() {
     const propertyCollection = client.db('urbanOasis').collection('properties');
     const wishCollection = client.db('urbanOasis').collection('wishes');
     const offerCollection = client.db('urbanOasis').collection('offers');
+    const reviewCollection = client.db('urbanOasis').collection('reviews');
 
     // verify token middleware
     const verifyToken = (req, res, next) => {
@@ -200,6 +201,13 @@ async function run() {
       };
       const result = await propertyCollection.updateOne(query, updatedDoc);
 
+      res.send(result);
+    });
+
+    // post review
+    app.post('/reviews', async (req, res) => {
+      const review = req.body;
+      const result = await reviewCollection.insertOne(review);
       res.send(result);
     });
 
