@@ -211,6 +211,13 @@ async function run() {
       res.send(result);
     });
 
+    // get review for each property
+    app.get('/reviews/:propertyId', async (req, res) => {
+      const query = { propertyId: req.params.propertyId };
+      const result = await reviewCollection.find(query).toArray();
+      res.send(result);
+    });
+
     // user related api
     app.get('/allProperties', verifyToken, async (req, res) => {
       const query = { status: 'verified' };
