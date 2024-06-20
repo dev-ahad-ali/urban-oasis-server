@@ -211,10 +211,31 @@ async function run() {
       res.send(result);
     });
 
+    // get review based on user
+    app.get('/reviews/:email', async (req, res) => {
+      const email = req.params.email;
+      const query = { reviewerEmail: email };
+      const result = await reviewCollection.find(query).toArray();
+      return res.send(result);
+    });
+
+    // ger all review
+    app.get('/reviews', async (req, res) => {
+      const result = await reviewCollection.find().toArray();
+      return res.send(result);
+    });
+
     // get review for each property
     app.get('/reviews/:propertyId', async (req, res) => {
       const query = { propertyId: req.params.propertyId };
       const result = await reviewCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    // delete review
+    app.delete('/reviews/:id', async (req, res) => {
+      const query = { _id: new ObjectId(req.params.id) };
+      const result = await reviewCollection.deleteOne(query);
       res.send(result);
     });
 
