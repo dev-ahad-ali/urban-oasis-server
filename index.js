@@ -226,7 +226,7 @@ async function run() {
     });
 
     // get review for each property
-    app.get('/reviews/:propertyId', async (req, res) => {
+    app.get('/review/:propertyId', async (req, res) => {
       const query = { propertyId: req.params.propertyId };
       const result = await reviewCollection.find(query).toArray();
       res.send(result);
@@ -241,8 +241,16 @@ async function run() {
 
     // user related api
     app.get('/allProperties', verifyToken, async (req, res) => {
-      const query = { status: 'verified' };
-      const result = await propertyCollection.find(query).toArray();
+      const query = { status: 'verified', location: { $regex: req.query.location, $options: 'i' } };
+      const priceSort = req.query.sort;
+      if (!priceSort) {
+        const result = await propertyCollection.find(query).toArray();
+        return res.send(result);
+      }
+      const result = await propertyCollection
+        .find(query)
+        .sort({ minPrice: priceSort === 'low' ? 1 : -1 })
+        .toArray();
       res.send(result);
     });
 
