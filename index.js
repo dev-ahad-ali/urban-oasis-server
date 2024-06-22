@@ -145,6 +145,13 @@ async function run() {
       res.send(result);
     });
 
+    // delete fraud property
+    app.delete('/deleteProperties/:email', async (req, res) => {
+      const query = { agentEmail: req.params.email };
+      const result = await propertyCollection.deleteMany(query);
+      res.send(result);
+    });
+
     // advertise property
     app.patch('/advertiseProperty/:id', async (req, res) => {
       const query = { _id: new ObjectId(req.params.id) };
