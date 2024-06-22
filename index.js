@@ -145,6 +145,18 @@ async function run() {
       res.send(result);
     });
 
+    // advertise property
+    app.patch('/advertiseProperty/:id', async (req, res) => {
+      const query = { _id: new ObjectId(req.params.id) };
+      const updatedDoc = {
+        $set: {
+          advertise: 'accepted',
+        },
+      };
+      const result = await propertyCollection.updateOne(query, updatedDoc);
+      res.send(result);
+    });
+
     // Agent Api
 
     // add property
