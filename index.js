@@ -137,6 +137,14 @@ async function run() {
       res.send(result);
     });
 
+    // get property for advertise
+    app.get('/advertiseProperties', async (req, res) => {
+      const query = { status: 'verified' };
+      const result = await propertyCollection.find(query).toArray();
+
+      res.send(result);
+    });
+
     // Agent Api
 
     // add property
