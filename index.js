@@ -157,6 +157,12 @@ async function run() {
       res.send(result);
     });
 
+    app.get('/displayProperties', async (req, res) => {
+      const query = { advertise: 'accepted' };
+      const result = await propertyCollection.find(query).sort({ _id: -1 }).toArray();
+      res.send(result);
+    });
+
     // Agent Api
 
     // add property
