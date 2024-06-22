@@ -157,9 +157,16 @@ async function run() {
       res.send(result);
     });
 
+    // home page display properties
     app.get('/displayProperties', async (req, res) => {
       const query = { advertise: 'accepted' };
       const result = await propertyCollection.find(query).sort({ _id: -1 }).toArray();
+      res.send(result);
+    });
+
+    // latest reviews
+    app.get('/latestReviews', async (req, res) => {
+      const result = await reviewCollection.find().sort({ _id: -1 }).toArray();
       res.send(result);
     });
 
