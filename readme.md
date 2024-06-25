@@ -1,6 +1,6 @@
 # Urban Oasis - MERN Stack based real estate website.
 
-### Clint Side Repo - [Client Side Repository](https://github.com/programming-hero-web-course1/b9a12-client-side-dev-ahad-ali)
+### Clint Side Repo - [Client Side Repository](https://github.com/dev-ahad-ali/urban-oasis-client)
 
 ### Live site - [Website's live link](https://urban-oasis-indev.web.app/)
 
